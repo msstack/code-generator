@@ -21,9 +21,9 @@
     <dependencies>
         <!-- load version with latest commit -->
         <dependency>
-            <groupId>com.github.msstack</groupId>
+            <groupId>com.github.randilfernando</groupId>
             <artifactId>model-converter</artifactId>
-            <version>-SNAPSHOT</version>
+            <version>cc0453352509faf771dc1cc5ee82ddc6b2ca2307</version>
         </dependency>
 
         <dependency>
