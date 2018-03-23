@@ -18,7 +18,7 @@ public class Sample {
     public static void main(String[] args) throws URISyntaxException {
         BusinessModel businessModel = readBusinessModelUsingModelConverter();
         List<MicroServiceModel> microServiceModels = modelConverter.convertToMicroServiceModel(businessModel);
-        System.out.println("Business model read successfully, version: " + businessModel.getVersion());
+        System.out.println("Business model converted successfully, version: " + microServiceModels.get(0).getVersion());
     }
 
     public static BusinessModel readBusinessModelUsingModelConverter() throws URISyntaxException {
