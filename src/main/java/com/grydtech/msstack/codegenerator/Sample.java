@@ -12,12 +12,17 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public class Sample {
+    private static ModelReader modelReader = new ModelReaderJackson();
+    private static ModelConverter modelConverter = new ModelConverterEntityBased();
+
     public static void main(String[] args) throws URISyntaxException {
-        File file = new File(Sample.class.getResource("/sample.json").toURI());
-        ModelReader modelReader = new ModelReaderJackson();
-        ModelConverter modelConverter = new ModelConverterEntityBased();
-        BusinessModel businessModel = modelReader.readBusinessModel(file);
+        BusinessModel businessModel = readBusinessModelUsingModelConverter();
         List<MicroServiceModel> microServiceModels = modelConverter.convertToMicroServiceModel(businessModel);
         System.out.println("Business model read successfully, version: " + businessModel.getVersion());
+    }
+
+    public static BusinessModel readBusinessModelUsingModelConverter() throws URISyntaxException {
+        File file = new File(Sample.class.getResource("/sample.json").toURI());
+        return modelReader.readBusinessModel(file);
     }
 }

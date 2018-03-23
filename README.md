@@ -1,13 +1,12 @@
 # MSstack (A full stack micro services framework for Java)
 
 [![Build Status](https://www.travis-ci.org/msstack/code-generator.svg?branch=master)](https://www.travis-ci.org/msstack/code-generator)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7ef6c13e31354bc88425bbcdf0e5762c)](https://www.codacy.com/app/randilfernando/code-generator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=msstack/code-generator&amp;utm_campaign=Badge_Grade)
-
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/92ae77e01ce244ff963cdfa87100d165)](https://www.codacy.com/app/grydtech/code-generator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=msstack/code-generator&amp;utm_campaign=Badge_Grade)
 ## About this project
 This is the code generator of msstack  
 Generate business model into a code base which can be used to deployed in multiple micro services
 
->Note: For further informaions about MSstack [msstack.ml](http://msstack.ml)
+>Note: For further informaions about MSstack [msstack.grydtech.com](http://msstack.grydtech.com)
 
 ## Setup project
 
