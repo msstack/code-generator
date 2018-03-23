@@ -1,0 +1,88 @@
+{
+  "version": "0.0.1",
+  "entities": [
+    {
+      "id": "en1",
+      "name": "order_item",
+      "fields": [
+        {
+          "name": "item_code",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "quantity",
+          "type": "integer"
+        },
+        {
+          "name": "unit_price",
+          "type": "double"
+        },
+        {
+          "name": "price",
+          "type": "double"
+        }
+      ]
+    },
+    {
+      "id": "en2",
+      "name": "order",
+      "fields": [
+        {
+          "name": "order_id",
+          "type": "string"
+        },
+        {
+          "name": "customer_id",
+          "type": "string"
+        },
+        {
+          "name": "payment",
+          "type": "double"
+        },
+        {
+          "name": "items",
+          "type": "array<en1>"
+        }
+      ]
+    }
+  ],
+  "contracts": [
+    {
+      "id": "cn1",
+      "entity_id": "en2",
+      "handler": {
+        "type": "command",
+        "name": "create_order"
+      },
+      "events": [
+        "order_created"
+      ]
+    },
+    {
+      "id": "cn2",
+      "entity_id": "en2",
+      "handler": {
+        "type": "command",
+        "name": "add_item"
+      },
+      "events": [
+        "item_added"
+      ]
+    },
+    {
+      "id": "cn3",
+      "entity_id": "en2",
+      "handler": {
+        "type": "command",
+        "name": "finalize_order"
+      },
+      "events": [
+        "order_finalized"
+      ]
+    }
+  ]
+}

@@ -11,7 +11,21 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <!-- load version with latest commit -->
+        <dependency>
+            <groupId>com.github.msstack</groupId>
+            <artifactId>model-converter</artifactId>
+            <version>-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
