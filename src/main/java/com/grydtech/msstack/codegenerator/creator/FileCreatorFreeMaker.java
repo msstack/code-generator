@@ -4,12 +4,14 @@ import com.google.common.base.CaseFormat;
 import com.grydtech.msstack.codegenerator.creator.templatehelpers.ToCamelCase;
 import com.grydtech.msstack.codegenerator.creator.templatehelpers.ToHeadlessCamelCase;
 import com.grydtech.msstack.codegenerator.creator.templatehelpers.ToKebabCase;
+import com.grydtech.msstack.modelconverter.microservice.Attribute;
 import com.grydtech.msstack.modelconverter.microservice.EntityClassSchema;
 import com.grydtech.msstack.modelconverter.microservice.EventClassSchema;
 import com.grydtech.msstack.modelconverter.microservice.HandlerClassSchema;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.w3c.dom.Attr;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,8 +61,16 @@ public class FileCreatorFreeMaker implements FileCreator {
 
         List<String> importPackages = new ArrayList<>();
 
-        importPackages.add("java.util.List");
-        importPackages.add(basePackageName + ".events.*");
+        for (Attribute attribute: entityClass.getAttributes()) {
+            if ("array".equals(attribute.getMultiplicity())) {
+                importPackages.add("java.util.List");
+                break;
+            }
+        }
+
+        if (!entityClass.getEvents().isEmpty()) {
+            importPackages.add(basePackageName + ".events.*");
+        }
 
         Map<String, Object> root = new HashMap<>();
         root.put("packageName", packageName);
