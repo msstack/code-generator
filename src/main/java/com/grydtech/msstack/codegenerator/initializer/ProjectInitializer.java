@@ -57,6 +57,8 @@ public final class ProjectInitializer {
 
             for (HandlerClassSchema handlerClass : microServiceModel.getHandlers()) {
                 fileCreator.createHandlerClass(basePackage, handlerClass);
+                fileCreator.createRequestClass(basePackage, handlerClass.getConsume());
+                fileCreator.createResponseClass(basePackage, handlerClass.getProduce());
             }
         }
     }
