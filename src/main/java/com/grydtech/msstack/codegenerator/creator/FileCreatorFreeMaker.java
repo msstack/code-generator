@@ -11,12 +11,10 @@ import com.grydtech.msstack.modelconverter.microservice.HandlerClassSchema;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.w3c.dom.Attr;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
