@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github.msstack</groupId>
             <artifactId>model-converter</artifactId>
-            <version>dd9434e762b6b3ad1f3e31495e3281ca543544c6</version>
+            <version>96075441eab1247d96ecb7b89daadf396493aa27</version>
         </dependency>
 
         <!-- templating engine for java -->
