@@ -3,7 +3,7 @@
   "entities": [
     {
       "id": "en1",
-      "name": "order_item",
+      "name": "item",
       "fields": [
         {
           "name": "item_code",
@@ -82,6 +82,27 @@
       },
       "events": [
         "order_finalized"
+      ]
+    },
+    {
+      "id": "cn4",
+      "entity_id": "en1",
+      "handler": {
+        "type": "query",
+        "name": "get_item"
+      },
+      "events": [
+      ]
+    },
+    {
+      "id": "cn5",
+      "entity_id": "en1",
+      "handler": {
+        "type": "command",
+        "name": "add_item"
+      },
+      "events": [
+        "item_added"
       ]
     }
   ]
