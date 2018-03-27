@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.grydtech.msstack</groupId>
-    <artifactId>codegenerator</artifactId>
+    <artifactId>code-generator</artifactId>
     <version>1.0</version>
 
     <properties>
