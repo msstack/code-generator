@@ -50,6 +50,39 @@
       ]
     }
   ],
+  "requests": [
+    {
+      "id": "req1",
+      "name": "add_item_request",
+      "type": "command",
+      "fields": [
+        {
+          "name": "item_code",
+          "type": "string"
+        },
+        {
+          "name": "quantity",
+          "type": "integer"
+        }
+      ]
+    }
+  ],
+  "responses": [
+    {
+      "id": "res1",
+      "name": "add_item_response",
+      "fields": [
+        {
+          "name": "item_code",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "integer"
+        }
+      ]
+    }
+  ],
   "contracts": [
     {
       "id": "cn1",
@@ -58,6 +91,8 @@
         "type": "command",
         "name": "create_order"
       },
+      "request_id": "req1",
+      "response_id": "res1",
       "events": [
         "order_created"
       ]
@@ -69,6 +104,8 @@
         "type": "command",
         "name": "add_item"
       },
+      "request_id": "req1",
+      "response_id": "res1",
       "events": [
         "item_added"
       ]
@@ -80,6 +117,8 @@
         "type": "command",
         "name": "finalize_order"
       },
+      "request_id": "req1",
+      "response_id": "res1",
       "events": [
         "order_finalized"
       ]
@@ -91,6 +130,8 @@
         "type": "query",
         "name": "get_item"
       },
+      "request_id": "req1",
+      "response_id": "res1",
       "events": [
       ]
     },
@@ -101,6 +142,8 @@
         "type": "command",
         "name": "add_item"
       },
+     "request_id": "req1",
+      "response_id": "res1",
       "events": [
         "item_added"
       ]
