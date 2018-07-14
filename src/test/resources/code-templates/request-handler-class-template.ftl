@@ -13,9 +13,9 @@ public class ${toCamel(className)} implements ${toCamel(handlerType)}<${toCamel(
         // add logic before ${toCamel(event.name)} emit
         ${toCamel(event.name)} ${toHeadlessCamel(event.name)} = new ${toCamel(event.name)}();
         // add logic after ${toCamel(event)} emit
+    </#list>
         ${toCamel(response.name)} ${toHeadlessCamel(response.name)} = new ${toCamel(response.name)}();
         return ${toHeadlessCamel(response.name)};
-    </#list>
     }
 
 }
