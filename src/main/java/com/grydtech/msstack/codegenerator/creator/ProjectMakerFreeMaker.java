@@ -141,6 +141,7 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("packageName", packageName);
         root.put("importPackages", importPackages);
         root.put("className", handlerClass.getName());
+        root.put("endPoint", handlerClass.getEndPoint());
         root.put("handlerType", handlerType);
         root.put("request", handlerClass.getRequestClass());
         root.put("response", handlerClass.getResponseClass());
@@ -206,6 +207,7 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("packageName", packageName);
         root.put("importPackages", importPackages);
         root.put("className", requestClass.getName());
+        root.put("attributes", requestClass.getAttributes());
 
         createFile(filePath, fileName, template, root);
     }
@@ -239,6 +241,7 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("packageName", packageName);
         root.put("importPackages", importPackages);
         root.put("className", responseClass.getName());
+        root.put("attributes", responseClass.getAttributes());
 
         createFile(filePath, fileName, template, root);
     }

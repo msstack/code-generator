@@ -31,7 +31,7 @@ public class ${toCamel(className)} {
     // generating event handlers
 <#list events as event>
     public void apply(${toCamel(event.name)} ${toHeadlessCamel(event.name)}) {
-        // add ${toCamel(event)} based logic here
+        // add ${toCamel(event.name)} based logic here
     }
 </#list>
     // end generating event handlers

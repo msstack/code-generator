@@ -8,9 +8,10 @@ public class ${toCamel(className)} implements EventHandler<${toCamel(request.nam
 
     public void handle(${toCamel(request.name)} ${toHeadlessCamel(request.name)}) {
     <#list events as event>
-        // add logic before ${toCamel(event)} emit
-        ${toCamel(event)} ${toHeadlessCamel(event)} = new ${toCamel(event)}();
-        // add logic after ${toCamel(event)} emit
+        // add logic before ${toCamel(event.name)} emit
+        ${toCamel(event.name)} ${toHeadlessCamel(event.name)} = new ${toCamel(event.name)}();
+        ${toHeadlessCamel(event.name)}.emit();
+        // add logic after ${toCamel(event.name)} emit
     </#list>
     }
 
