@@ -4,7 +4,7 @@ package ${packageName};
 import ${importPackage};
 </#list>
 
-public class ${toCamel(className)} {
+public class ${toCamel(className)} extends BasicEvent {
 
 <#list attributes as attribute>
     <#if attribute.array>

@@ -114,7 +114,7 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
     }
 
     @Override
-    public void createHandlerClass(HandlerClass handlerClass) throws IOException, TemplateException {
+    public void createRequestHandlerClass(HandlerClass handlerClass) throws IOException, TemplateException {
         String packageName = basePackageName + ".handlers";
 
         List<String> importPackages = new ArrayList<>();
@@ -140,6 +140,35 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("handlerType", handlerType);
         root.put("request", handlerClass.getRequestClass());
         root.put("response", handlerClass.getResponseClass());
+        root.put("events", handlerClass.getEventClasses());
+
+        createFile(filePath, fileName, template, root);
+    }
+
+    @Override
+    public void createEventHandlerClass(HandlerClass handlerClass) throws IOException, TemplateException {
+        String packageName = basePackageName + ".handlers";
+
+        List<String> importPackages = new ArrayList<>();
+
+        importPackages.add("com.grydtech.msstack.core.handler.*");
+        importPackages.add("javax.ws.rs.Path");
+
+        importPackages.add(basePackageName + ".events.*");
+
+        String filePath = sourcePath + File.separator + packageName.replace(".", File.separator);
+        String fileName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, handlerClass.getName()) + ".java";
+
+        Template template = cfg.getTemplate("event-handler-class-template.ftl");
+
+        String handlerType = handlerClass.getType() + Constants.HANDLER_CLASS_SUFFIX;
+
+        Map<String, Object> root = new HashMap<>();
+        root.put("packageName", packageName);
+        root.put("importPackages", importPackages);
+        root.put("className", handlerClass.getName());
+        root.put("handlerType", handlerType);
+        root.put("request", handlerClass.getRequestClass());
         root.put("events", handlerClass.getEventClasses());
 
         createFile(filePath, fileName, template, root);

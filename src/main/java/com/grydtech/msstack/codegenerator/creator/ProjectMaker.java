@@ -31,7 +31,8 @@ public abstract class ProjectMaker {
     abstract public void createProjectPom() throws IOException, TemplateException;
     abstract public void createEntityClass(EntityClass entityClass) throws IOException, TemplateException;
     abstract public void createEventClass(EventClass eventClass) throws IOException, TemplateException;
-    abstract public void createHandlerClass(HandlerClass handlerClass) throws IOException, TemplateException;
+    abstract public void createRequestHandlerClass(HandlerClass handlerClass) throws IOException, TemplateException;
+    abstract public void createEventHandlerClass(HandlerClass handlerClass) throws IOException, TemplateException;
     abstract public void createRequestClass(RequestClass requestClass) throws IOException, TemplateException;
     abstract public void createResponseClass(ResponseClass responseClass) throws IOException, TemplateException;
 }

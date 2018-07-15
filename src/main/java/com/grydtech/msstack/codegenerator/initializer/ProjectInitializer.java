@@ -4,6 +4,7 @@ import com.google.common.base.CaseFormat;
 import com.grydtech.msstack.codegenerator.creator.ProjectMaker;
 import com.grydtech.msstack.codegenerator.creator.ProjectMakerFreeMaker;
 import com.grydtech.msstack.modelconverter.business.BusinessModel;
+import com.grydtech.msstack.modelconverter.common.Constants;
 import com.grydtech.msstack.modelconverter.microservice.communication.EventClass;
 import com.grydtech.msstack.modelconverter.microservice.communication.RequestClass;
 import com.grydtech.msstack.modelconverter.microservice.communication.ResponseClass;
@@ -57,7 +58,11 @@ public final class ProjectInitializer {
             }
 
             for (HandlerClass handlerClass : microServiceModel.getHandlerClasses()) {
-                projectMaker.createHandlerClass(handlerClass);
+                if (handlerClass.getType().equals(Constants.EVENT_HANDLER_TYPE)) {
+                    projectMaker.createEventHandlerClass(handlerClass);
+                } else {
+                    projectMaker.createRequestHandlerClass(handlerClass);
+                }
             }
 
             for (RequestClass requestClass : microServiceModel.getRequestClasses()) {
