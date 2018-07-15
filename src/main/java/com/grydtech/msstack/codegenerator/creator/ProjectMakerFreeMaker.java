@@ -85,6 +85,8 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
 
         List<String> importPackages = new ArrayList<>();
 
+        importPackages.add("com.grydtech.msstack.core.BasicEvent;");
+
         for (Attribute attribute : eventClass.getAttributes()) {
             if (attribute.isArray()) {
                 importPackages.add("java.util.List");
@@ -152,7 +154,6 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         List<String> importPackages = new ArrayList<>();
 
         importPackages.add("com.grydtech.msstack.core.handler.*");
-        importPackages.add("javax.ws.rs.Path");
 
         importPackages.add(basePackageName + ".events.*");
 
