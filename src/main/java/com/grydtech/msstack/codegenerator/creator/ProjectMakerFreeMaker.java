@@ -85,7 +85,8 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
 
         List<String> importPackages = new ArrayList<>();
 
-        importPackages.add("com.grydtech.msstack.core.BasicEvent;");
+        importPackages.add("com.grydtech.msstack.core.BasicEvent");
+        importPackages.add("com.grydtech.msstack.core.annotation.Event");
 
         for (Attribute attribute : eventClass.getAttributes()) {
             if (attribute.isArray()) {
@@ -111,6 +112,7 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("importPackages", importPackages);
         root.put("className", eventClass.getName());
         root.put("attributes", eventClass.getAttributes());
+        root.put("eventGroup", eventClass.getEventGroup());
 
         createFile(filePath, fileName, template, root);
     }

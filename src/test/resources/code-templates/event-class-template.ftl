@@ -4,6 +4,7 @@ package ${packageName};
 import ${importPackage};
 </#list>
 
+@Event(stream = "${eventGroup}")
 public class ${toCamel(className)} extends BasicEvent {
 
 <#list attributes as attribute>
