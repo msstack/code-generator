@@ -48,6 +48,7 @@ public final class ProjectInitializer {
             ProjectMaker projectMaker = new ProjectMakerFreeMaker(projectPath, groupId, artifactId, version);
 
             projectMaker.createProjectPom();
+            projectMaker.createApplicationClass();
 
             for (EntityClass entityClass : microServiceModel.getEntityClasses()) {
                 projectMaker.createEntityClass(entityClass);

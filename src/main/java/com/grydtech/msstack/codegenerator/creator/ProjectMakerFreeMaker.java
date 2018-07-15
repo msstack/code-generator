@@ -45,6 +45,26 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
     }
 
     @Override
+    public void createApplicationClass() throws IOException, TemplateException {
+        String packageName = basePackageName;
+
+        List<String> importPackages = new ArrayList<>();
+        importPackages.add("com.grydtech.msstack.core.MicroserviceApplication");
+        importPackages.add("com.grydtech.msstack.core.MicroserviceRunner");
+
+        String filePath = sourcePath + File.separator + packageName.replace(".", File.separator);
+        String fileName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, artifactId) + ".java";
+        Template template = cfg.getTemplate("application-class-template.ftl");
+
+        Map<String, Object> root = new HashMap<>();
+        root.put("packageName", packageName);
+        root.put("importPackages", importPackages);
+        root.put("className", artifactId);
+
+        createFile(filePath, fileName, template, root);
+    }
+
+    @Override
     public void createEntityClass(EntityClass entityClass) throws IOException, TemplateException {
         String packageName = basePackageName + ".entities";
 

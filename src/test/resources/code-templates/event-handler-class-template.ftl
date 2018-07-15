@@ -6,6 +6,7 @@ import ${importPackage};
 
 public class ${toCamel(className)} implements EventHandler<${toCamel(request.name)}> {
 
+    @Override
     public void handle(${toCamel(request.name)} ${toHeadlessCamel(request.name)}) {
     <#list events as event>
         // add logic before ${toCamel(event.name)} emit
