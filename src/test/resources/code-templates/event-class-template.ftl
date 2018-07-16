@@ -4,26 +4,25 @@ package ${packageName};
 import ${importPackage};
 </#list>
 
-public class ${toCamel(className)} {
+@Event(stream = "${eventGroup}")
+public class ${toCamel(className)} extends BasicEvent {
 
 <#list attributes as attribute>
-    <#if attribute.multiplicity == "single">
-    private ${toCamel(attribute.type)} ${toHeadlessCamel(attribute.name)};
-    </#if>
-    <#if attribute.multiplicity == "array">
+    <#if attribute.array>
     private List<${toCamel(attribute.type)}> ${toHeadlessCamel(attribute.name)};
+    <#else>
+    private ${toCamel(attribute.type)} ${toHeadlessCamel(attribute.name)};
     </#if>
 </#list>
 
     // generating getters for entity attributes
 <#list attributes as attribute>
-    <#if attribute.multiplicity == "single">
-    public ${toCamel(attribute.type)} get${toCamel(attribute.name)}() {
+    <#if attribute.array>
+    public List<${toCamel(attribute.type)}> get${toCamel(attribute.name)}() {
         return this.${toHeadlessCamel(attribute.name)};
     }
-    </#if>
-    <#if attribute.multiplicity == "array">
-    public List<${toCamel(attribute.type)}> get${toCamel(attribute.name)}() {
+    <#else>
+    public ${toCamel(attribute.type)} get${toCamel(attribute.name)}() {
         return this.${toHeadlessCamel(attribute.name)};
     }
     </#if>

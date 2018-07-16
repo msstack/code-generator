@@ -4,7 +4,13 @@ import com.google.common.base.CaseFormat;
 import com.grydtech.msstack.codegenerator.creator.templatehelpers.ToCamelCase;
 import com.grydtech.msstack.codegenerator.creator.templatehelpers.ToHeadlessCamelCase;
 import com.grydtech.msstack.codegenerator.creator.templatehelpers.ToKebabCase;
+import com.grydtech.msstack.modelconverter.common.Constants;
 import com.grydtech.msstack.modelconverter.microservice.*;
+import com.grydtech.msstack.modelconverter.microservice.communication.EventClass;
+import com.grydtech.msstack.modelconverter.microservice.communication.RequestClass;
+import com.grydtech.msstack.modelconverter.microservice.communication.ResponseClass;
+import com.grydtech.msstack.modelconverter.microservice.entity.EntityClass;
+import com.grydtech.msstack.modelconverter.microservice.handler.HandlerClass;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -12,10 +18,7 @@ import freemarker.template.TemplateException;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ProjectMakerFreeMaker extends ProjectMaker {
     private final static Configuration cfg;
@@ -42,19 +45,39 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
     }
 
     @Override
-    public void createEntityClass(EntityClassSchema entityClass) throws IOException, TemplateException {
+    public void createApplicationClass() throws IOException, TemplateException {
+        String packageName = basePackageName;
+
+        List<String> importPackages = new ArrayList<>();
+        importPackages.add("com.grydtech.msstack.core.MicroserviceApplication");
+        importPackages.add("com.grydtech.msstack.core.MicroserviceRunner");
+
+        String filePath = sourcePath + File.separator + packageName.replace(".", File.separator);
+        String fileName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, artifactId) + ".java";
+        Template template = cfg.getTemplate("application-class-template.ftl");
+
+        Map<String, Object> root = new HashMap<>();
+        root.put("packageName", packageName);
+        root.put("importPackages", importPackages);
+        root.put("className", artifactId);
+
+        createFile(filePath, fileName, template, root);
+    }
+
+    @Override
+    public void createEntityClass(EntityClass entityClass) throws IOException, TemplateException {
         String packageName = basePackageName + ".entities";
 
         List<String> importPackages = new ArrayList<>();
 
         for (Attribute attribute : entityClass.getAttributes()) {
-            if ("array".equals(attribute.getMultiplicity())) {
+            if (attribute.isArray()) {
                 importPackages.add("java.util.List");
                 break;
             }
         }
 
-        if (!entityClass.getEvents().isEmpty()) {
+        if (entityClass.isMainEntity() && !entityClass.getEventClasses().isEmpty()) {
             importPackages.add(basePackageName + ".events.*");
         }
 
@@ -67,16 +90,37 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("importPackages", importPackages);
         root.put("className", entityClass.getName());
         root.put("attributes", entityClass.getAttributes());
-        root.put("events", entityClass.getEvents());
+        if (entityClass.isMainEntity()) {
+            root.put("events", entityClass.getEventClasses());
+        } else {
+            root.put("events", Collections.EMPTY_LIST);
+        }
 
         createFile(filePath, fileName, template, root);
     }
 
     @Override
-    public void createEventClass(EventClassSchema eventClass) throws IOException, TemplateException {
+    public void createEventClass(EventClass eventClass) throws IOException, TemplateException {
         String packageName = basePackageName + ".events";
 
         List<String> importPackages = new ArrayList<>();
+
+        importPackages.add("com.grydtech.msstack.core.BasicEvent");
+        importPackages.add("com.grydtech.msstack.core.annotation.Event");
+
+        for (Attribute attribute : eventClass.getAttributes()) {
+            if (attribute.isArray()) {
+                importPackages.add("java.util.List");
+                break;
+            }
+        }
+
+        for (Attribute attribute : eventClass.getAttributes()) {
+            if (attribute.isEntity()) {
+                importPackages.add(basePackageName + ".entities.*");
+                break;
+            }
+        }
 
         String filePath = sourcePath + File.separator + packageName.replace(".", File.separator);
         String fileName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, eventClass.getName()) + ".java";
@@ -88,15 +132,19 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("importPackages", importPackages);
         root.put("className", eventClass.getName());
         root.put("attributes", eventClass.getAttributes());
+        root.put("eventGroup", eventClass.getEventGroup());
 
         createFile(filePath, fileName, template, root);
     }
 
     @Override
-    public void createHandlerClass(HandlerClassSchema handlerClass) throws IOException, TemplateException {
+    public void createRequestHandlerClass(HandlerClass handlerClass) throws IOException, TemplateException {
         String packageName = basePackageName + ".handlers";
 
         List<String> importPackages = new ArrayList<>();
+
+        importPackages.add("com.grydtech.msstack.core.handler.*");
+        importPackages.add("javax.ws.rs.Path");
 
         importPackages.add(basePackageName + ".events.*");
         importPackages.add(basePackageName + ".requests.*");
@@ -105,24 +153,70 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         String filePath = sourcePath + File.separator + packageName.replace(".", File.separator);
         String fileName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, handlerClass.getName()) + ".java";
 
-        Template template = cfg.getTemplate("handler-class-template.ftl");
+        Template template = cfg.getTemplate("request-handler-class-template.ftl");
+
+        String handlerType = handlerClass.getType() + Constants.HANDLER_CLASS_SUFFIX;
 
         Map<String, Object> root = new HashMap<>();
         root.put("packageName", packageName);
         root.put("importPackages", importPackages);
         root.put("className", handlerClass.getName());
-        root.put("request", handlerClass.getConsume());
-        root.put("response", handlerClass.getProduce());
-        root.put("events", handlerClass.getEvents());
+        root.put("endPoint", handlerClass.getEndPoint());
+        root.put("handlerType", handlerType);
+        root.put("request", handlerClass.getRequestClass());
+        root.put("response", handlerClass.getResponseClass());
+        root.put("events", handlerClass.getEventClasses());
 
         createFile(filePath, fileName, template, root);
     }
 
     @Override
-    public void createRequestClass(RequestClassSchema requestClass) throws IOException, TemplateException {
+    public void createEventHandlerClass(HandlerClass handlerClass) throws IOException, TemplateException {
+        String packageName = basePackageName + ".handlers";
+
+        List<String> importPackages = new ArrayList<>();
+
+        importPackages.add("com.grydtech.msstack.core.handler.*");
+
+        importPackages.add(basePackageName + ".events.*");
+
+        String filePath = sourcePath + File.separator + packageName.replace(".", File.separator);
+        String fileName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, handlerClass.getName()) + ".java";
+
+        Template template = cfg.getTemplate("event-handler-class-template.ftl");
+
+        String handlerType = handlerClass.getType() + Constants.HANDLER_CLASS_SUFFIX;
+
+        Map<String, Object> root = new HashMap<>();
+        root.put("packageName", packageName);
+        root.put("importPackages", importPackages);
+        root.put("className", handlerClass.getName());
+        root.put("handlerType", handlerType);
+        root.put("request", handlerClass.getRequestClass());
+        root.put("events", handlerClass.getEventClasses());
+
+        createFile(filePath, fileName, template, root);
+    }
+
+    @Override
+    public void createRequestClass(RequestClass requestClass) throws IOException, TemplateException {
         String packageName = basePackageName + ".requests";
 
         List<String> importPackages = new ArrayList<>();
+
+        for (Attribute attribute : requestClass.getAttributes()) {
+            if (attribute.isArray()) {
+                importPackages.add("java.util.List");
+                break;
+            }
+        }
+
+        for (Attribute attribute : requestClass.getAttributes()) {
+            if (attribute.isEntity()) {
+                importPackages.add(basePackageName + ".entities.*");
+                break;
+            }
+        }
 
         String filePath = sourcePath + File.separator + packageName.replace(".", File.separator);
         String fileName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, requestClass.getName()) + ".java";
@@ -133,15 +227,30 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("packageName", packageName);
         root.put("importPackages", importPackages);
         root.put("className", requestClass.getName());
+        root.put("attributes", requestClass.getAttributes());
 
         createFile(filePath, fileName, template, root);
     }
 
     @Override
-    public void createResponseClass(ResponseClassSchema responseClass) throws IOException, TemplateException {
+    public void createResponseClass(ResponseClass responseClass) throws IOException, TemplateException {
         String packageName = basePackageName + ".responses";
 
         List<String> importPackages = new ArrayList<>();
+
+        for (Attribute attribute : responseClass.getAttributes()) {
+            if (attribute.isArray()) {
+                importPackages.add("java.util.List");
+                break;
+            }
+        }
+
+        for (Attribute attribute : responseClass.getAttributes()) {
+            if (attribute.isEntity()) {
+                importPackages.add(basePackageName + ".entities.*");
+                break;
+            }
+        }
 
         String filePath = sourcePath + File.separator + packageName.replace(".", File.separator);
         String fileName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, responseClass.getName()) + ".java";
@@ -152,6 +261,7 @@ public class ProjectMakerFreeMaker extends ProjectMaker {
         root.put("packageName", packageName);
         root.put("importPackages", importPackages);
         root.put("className", responseClass.getName());
+        root.put("attributes", responseClass.getAttributes());
 
         createFile(filePath, fileName, template, root);
     }

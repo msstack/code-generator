@@ -45,15 +45,104 @@
         },
         {
           "name": "items",
-          "type": "array<en1>"
+          "type": "en1",
+          "array": true
         }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "ev1",
+      "name": "order_created",
+      "entity_id": "en2"
+    },
+    {
+      "id": "ev2",
+      "name": "order_item_added",
+      "entity_id": "en2"
+    },
+    {
+      "id": "ev3",
+      "name": "order_finalized",
+      "entity_id": "en2"
+    },
+    {
+      "id": "ev4",
+      "name": "item_created",
+      "entity_id": "en1"
+    }
+  ],
+  "contracts": [
+    {
+      "id": "cn1",
+      "entity_id": "en2",
+      "handler": {
+        "type": "command",
+        "name": "create_order"
+      },
+      "request_id": "req1",
+      "response_id": "res1",
+      "event_ids": [
+        "ev1"
+      ]
+    },
+    {
+      "id": "cn2",
+      "entity_id": "en2",
+      "handler": {
+        "type": "command",
+        "name": "add_order_item"
+      },
+      "request_id": "req1",
+      "response_id": "res1",
+      "event_ids": [
+        "ev2"
+      ]
+    },
+    {
+      "id": "cn3",
+      "entity_id": "en2",
+      "handler": {
+        "type": "command",
+        "name": "finalize_order"
+      },
+      "request_id": "req1",
+      "response_id": "res1",
+      "event_ids": [
+        "ev3"
+      ]
+    },
+    {
+      "id": "cn4",
+      "entity_id": "en1",
+      "handler": {
+        "type": "query",
+        "name": "get_item"
+      },
+      "request_id": "req1",
+      "response_id": "res1",
+      "event_ids": [
+      ]
+    },
+    {
+      "id": "cn5",
+      "entity_id": "en1",
+      "handler": {
+        "type": "command",
+        "name": "add_item"
+      },
+      "request_id": "req1",
+      "response_id": "res1",
+      "event_ids": [
+        "ev4"
       ]
     }
   ],
   "requests": [
     {
       "id": "req1",
-      "name": "add_item_request",
+      "name": "add_order_item",
       "type": "command",
       "fields": [
         {
@@ -70,7 +159,7 @@
   "responses": [
     {
       "id": "res1",
-      "name": "add_item_response",
+      "name": "add_order_item",
       "fields": [
         {
           "name": "item_code",
@@ -83,69 +172,22 @@
       ]
     }
   ],
-  "contracts": [
+  "servers": [
     {
-      "id": "cn1",
-      "entity_id": "en2",
-      "handler": {
-        "type": "command",
-        "name": "create_order"
-      },
-      "request_id": "req1",
-      "response_id": "res1",
-      "events": [
-        "order_created"
+      "id": "sv1",
+      "name": "order",
+      "contract_ids": [
+        "cn1",
+        "cn2",
+        "cn3"
       ]
     },
     {
-      "id": "cn2",
-      "entity_id": "en2",
-      "handler": {
-        "type": "command",
-        "name": "add_item"
-      },
-      "request_id": "req1",
-      "response_id": "res1",
-      "events": [
-        "item_added"
-      ]
-    },
-    {
-      "id": "cn3",
-      "entity_id": "en2",
-      "handler": {
-        "type": "command",
-        "name": "finalize_order"
-      },
-      "request_id": "req1",
-      "response_id": "res1",
-      "events": [
-        "order_finalized"
-      ]
-    },
-    {
-      "id": "cn4",
-      "entity_id": "en1",
-      "handler": {
-        "type": "query",
-        "name": "get_item"
-      },
-      "request_id": "req1",
-      "response_id": "res1",
-      "events": [
-      ]
-    },
-    {
-      "id": "cn5",
-      "entity_id": "en1",
-      "handler": {
-        "type": "command",
-        "name": "add_item"
-      },
-     "request_id": "req1",
-      "response_id": "res1",
-      "events": [
-        "item_added"
+      "id": "sv2",
+      "name": "item",
+      "contract_ids": [
+        "cn4",
+        "cn5"
       ]
     }
   ]

@@ -25,5 +25,5 @@ mvn clean install
 1. Create business model according to json schema
 2. Run jar executable giving parameters
 ```bash
-java -jar codegenerator-1.0.jar "<model.json>" "<output folder>" "<group id>" "<version>"
+java -jar code-generator-1.0-SNAPSHOT.jar "<model.json>" "<output folder>" "<group id>" "<version>"
 ```
