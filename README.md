@@ -1,5 +1,5 @@
 # MSstack (A full stack micro services framework for Java)
-[![Build Status](https://www.travis-ci.org/msstack/code-generator.svg?branch=master)](https://www.travis-ci.org/msstack/code-generator)
+[![Build Status](https://www.travis-ci.com/msstack/code-generator.svg?branch=master)](https://www.travis-ci.com/msstack/code-generator)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/32fbd989f2544e49b87d0d891d77514c)](https://www.codacy.com/app/msstack/code-generator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=msstack/code-generator&amp;utm_campaign=Badge_Grade)
 
 ## About this project
